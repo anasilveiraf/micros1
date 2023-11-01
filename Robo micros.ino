@@ -5,8 +5,8 @@ int roda_esquerda2 = 9; // azul in2
 int enable_2 = 6; // roxo
 int roda_direita1 = 5; // verde in3
 int roda_direita2 = 4; // azul in4
-int detector_direita = 2;
-int detector_esquerda = 3;
+int detector_direita = 7;
+int detector_esquerda = 8;
 volatile byte state = LOW;
 
 int detecta_direita;
@@ -61,19 +61,27 @@ void parar ( ){
 
 void ir_para_direita ( ){
 // delay 945ms para girar totalmente
-  digitalWrite(roda_esquerda1,HIGH);
-  digitalWrite(roda_esquerda2,LOW);
-  digitalWrite(roda_direita1,LOW);
-  digitalWrite(roda_direita2,HIGH);
-
+  while (detecta_esquerda == LOW){
+    digitalWrite(roda_esquerda1,HIGH);
+    digitalWrite(roda_esquerda2,LOW);
+    digitalWrite(roda_direita1,LOW);
+    digitalWrite(roda_direita2,HIGH);
+  }
 }
 
 void ir_para_esquerda ( ){
 // delay delay(1030); para girar totalmente
-  digitalWrite(roda_esquerda1,LOW);
-  digitalWrite(roda_esquerda2,HIGH);
-  digitalWrite(roda_direita1,HIGH);
-  digitalWrite(roda_direita2,LOW);
+  while(detecta_direita == LOW){
+    digitalWrite(roda_esquerda1,LOW);
+    digitalWrite(roda_esquerda2,HIGH);
+    digitalWrite(roda_direita1,HIGH);
+    digitalWrite(roda_direita2,LOW);
+  }
+}
+
+void cruz ( ){
+// delay delay(1030); para girar totalmente
+  delay(10);
 }
 
 void detector_de_linha( ){
@@ -103,15 +111,27 @@ void loop() {
   detecta_direita = digitalRead(detector_direita);
   detecta_esquerda = digitalRead(detector_esquerda);
   
-  while(detecta_direita == detecta_esquerda) 
+    while(detecta_direita == detecta_esquerda) 
   {
     ir_para_frente ( );
+    delay(100);
     detecta_direita = digitalRead(detector_direita);
   	detecta_esquerda = digitalRead(detector_esquerda);
-    Serial.println(detecta_direita);
+ 
+    if (detecta_direita == detecta_esquerda == HIGH)
+      cruz();
+    else 
+      if (detecta_direita == LOW){
+        ir_para_direita ( );
+      }
+    else 
+      if (detecta_esquerda == LOW){
+        ir_para_esquerda ( );
+    }
+  delay(100);
   }
 
-/*  if(detecta_direita == LOW) 
+/*if(detecta_direita == LOW) 
   {
     ir_para_esquerda ( );
     
@@ -120,8 +140,6 @@ void loop() {
   {
     ir_para_direita ( );
   }*/
-
-  delay(100);
 
 }
 
