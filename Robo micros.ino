@@ -61,22 +61,24 @@ void parar ( ){
 
 void ir_para_direita ( ){
 // delay 945ms para girar totalmente
-  while (detecta_esquerda == LOW){
-    digitalWrite(roda_esquerda1,HIGH);
-    digitalWrite(roda_esquerda2,LOW);
+ // while (detecta_esquerda == LOW){
     digitalWrite(roda_direita1,LOW);
     digitalWrite(roda_direita2,HIGH);
-  }
+    digitalWrite(roda_esquerda1,HIGH);
+    digitalWrite(roda_esquerda2,LOW);
+    detecta_esquerda = digitalRead(detector_esquerda);
+  //}
 }
 
 void ir_para_esquerda ( ){
 // delay delay(1030); para girar totalmente
-  while(detecta_direita == LOW){
+  //while(detecta_direita == LOW){
     digitalWrite(roda_esquerda1,LOW);
     digitalWrite(roda_esquerda2,HIGH);
     digitalWrite(roda_direita1,HIGH);
     digitalWrite(roda_direita2,LOW);
-  }
+    detecta_direita = digitalRead(detector_direita);
+ // }
 }
 
 void cruz ( ){
@@ -105,31 +107,38 @@ void detector_de_linha( ){
 
 void loop() {
 
-  analogWrite(enable_2, 200);
-  analogWrite(enable_1, 200);
+  analogWrite(enable_2, 255);
+  analogWrite(enable_1, 255);
   
   detecta_direita = digitalRead(detector_direita);
   detecta_esquerda = digitalRead(detector_esquerda);
-  
-    while(detecta_direita == detecta_esquerda) 
+   
+  ir_para_esquerda ( );
+  delay(1000);
+  ir_para_direita ( );
+  delay(2000);
+
+ /* while(detecta_direita == detecta_esquerda && detecta_direita == HIGH ) 
   {
     ir_para_frente ( );
     delay(100);
     detecta_direita = digitalRead(detector_direita);
   	detecta_esquerda = digitalRead(detector_esquerda);
+  }
  
-    if (detecta_direita == detecta_esquerda == HIGH)
+    if (detecta_direita == detecta_esquerda && detecta_direita == LOW)
       cruz();
-    else 
-      if (detecta_direita == LOW){
-        ir_para_direita ( );
+      else
+     if (detecta_direita == LOW){
+       ir_para_esquerda ( );
+     
       }
     else 
       if (detecta_esquerda == LOW){
-        ir_para_esquerda ( );
+        ir_para_direita ( );
     }
   delay(100);
-  }
+
 
 /*if(detecta_direita == LOW) 
   {
