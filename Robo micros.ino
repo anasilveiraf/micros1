@@ -93,7 +93,7 @@ void cruz ( ){
 }
 
 void loop() {
-
+// comentario show de bola
   analogWrite(enable_2, 255);
   analogWrite(enable_1, 255);
   
